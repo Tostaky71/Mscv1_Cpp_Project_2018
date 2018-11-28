@@ -11,8 +11,8 @@ using namespace std;
                         vector<int> vertices;
                 public:
                        Face(){}
-                       void addVertex(int vertex){ vertices.push_back(vertex);}
-                       vector<int>& getVertices(){ return vertices;}
+                       void addVertex(int vertex){ vertices.push_back(vertex);}     // add a value in vertex
+                       vector<int>& getVertices(){ return vertices;}                // get vertices in output
                 };
 
 

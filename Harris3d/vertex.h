@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <set>
 
 #include <CGAL/basic.h>
 #include <CGAL/Search_traits.h>
@@ -16,7 +17,7 @@ using namespace std;
 
 class Face;
 
-          class Vertex{
+        class Vertex{
                 private:
 
                         int index;
@@ -31,18 +32,18 @@ class Face;
 
                 public:
                         double v[3];
-                        Vertex() {v[0] = v[1] = v[2] = 0; mark = false; depth = 0;isInterest = 0;}
-                        Vertex(double x1, double y1, double z1) {v[0] = x1; v[1] = y1; v[2] = z1;mark = false; depth = 0;isInterest = 0;}
+                        Vertex() {v[0] = v[1] = v[2] = 0; mark = false; depth = 0;isInterest = 0;}  // constructor by default : value = 0
+                        Vertex(double x1, double y1, double z1) {v[0] = x1; v[1] = y1; v[2] = z1;mark = false; depth = 0;isInterest = 0;}   // constructor
 
-                        double x() const { return v[ 0 ]; }
+                        double x() const { return v[ 0 ]; }     // return values as constants
                         double y() const { return v[ 1 ]; }
                         double z() const { return v[ 2 ]; }
 
-                        double& x() { return v[ 0 ]; }
+                        double& x() { return v[ 0 ]; }      // return values by reference
                         double& y() { return v[ 1 ]; }
                         double& z() { return v[ 2 ]; }
 
-                        double getX() {return v[0];}
+                        double getX() {return v[0];}        // return values
                         double getY() {return v[1];}
                         double getZ() {return v[2];}
 
@@ -74,14 +75,14 @@ class Face;
                         int getRadius(Vertex* vertices, double radius, vector<Vertex*>& V);
 
 
-                        void addVertex(int vertex){ adjacentVertices.insert(vertex);}
+                        void addVertex(int vertex){ adjacentVertices.insert(vertex);}   // add a vertex between two adjacent vertices
                         void addFace(int face){ faces.push_back(face); }
                         void processMaximum(Vertex* vertices, int numRings);
                         vector<int>& getFaces(){ return faces;}
                         set<int>& getAdjacentVertices() { return adjacentVertices;}
         };
 
-namespace CGAL {
+namespace CGAL {        // Kernel is useless here. This is certainly a rest of an old code.
 
   template <>
   struct Kernel_traits<Vertex> {

@@ -3,9 +3,11 @@
 #include <iostream>
 #include <cmath>
 #include <map>
+#include <set>
 
-void Vertex::getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices){
-    queue<Vertex*> Q;
+void Vertex::getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices)
+{
+    queue<Vertex*> Q;   // create a queue of vertices
     vector<Vertex*> marked;
 
     Q.push(this);
@@ -14,8 +16,8 @@ void Vertex::getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices){
     marked.push_back(this);
 
     while(!Q.empty()){
-        Vertex* v0 = Q.front();
-        Q.pop();
+        Vertex* v0 = Q.front(); // extract first element of the queue.
+        Q.pop();   // pop() removes the first element of the queue.
         V.push_back(new Vertex(v0->getX(), v0->getY(), v0->getZ())); //Indeed, copy vertex information rather than return the same vertex
 
         int dep = v0->getDepth();
@@ -34,7 +36,7 @@ void Vertex::getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices){
             }
     }
 
-    vector<Vertex*>::iterator ini = marked.begin();
+    vector<Vertex*>::iterator ini = marked.begin(); // initialize the first vector
 
     while(ini<marked.end()){
         (*ini)->setMark(false);
@@ -43,7 +45,7 @@ void Vertex::getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices){
     }
 }
 
-int Vertex :: getRadius(Vertex*  vertices, double radius, vector<Vertex*>& V){
+int Vertex :: getRadius(Vertex* vertices, double radius, vector<Vertex*>& V){
     vector<Vertex*> marked; //Store the marked vertices
     map<int, double> distances; //Store the distances relatives to the current vertex
     map<int, Vertex*> markedRing; //Elements in a new ring
