@@ -1,19 +1,21 @@
 #ifndef FACE_H
 #define FACE_H
 
-
 #include <vector>
 
-using namespace std;
+typedef std::vector<unsigned int> vint;
 
-          class Face{
-                private:
-                        vector<int> vertices;
-                public:
-                       Face(){}
-                       void addVertex(int vertex){ vertices.push_back(vertex);}     // add a value in vertex
-                       vector<int>& getVertices(){ return vertices;}                // get vertices in output
-                };
+class Face
+{
+    private :
+    vint vertices;
+    public:
+    Face(){}
+    ~Face(){}
+    void addVertex(unsigned int vertex){vertices.push_back(vertex);}
+    vint &getVertices(){return vertices;}
 
+    void displayF();
+};
 
 #endif // FACE_H

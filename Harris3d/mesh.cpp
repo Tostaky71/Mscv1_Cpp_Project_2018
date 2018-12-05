@@ -1,141 +1,96 @@
-#include <map>
-#include <cstdlib>
-#include <cstring>
-#include <algorithm>
-#include <math.h>
-#include <fstream>
+#include "mesh.h"
+#include "utility.h"
+#include <iostream>
 #include <cassert>
-#include <cfloat>
-#include "Mesh.h"
-//#include "util.h"
-//#include "Clock.h"
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_eigen.h>
+#include <fstream>
 
 using namespace std;
+Mesh::Mesh()
+{
 
-Mesh::Mesh(){
-       vertices = NULL;
-       faces = NULL;
-       numVertices = 0;
-       numFaces = 0;
 }
 
 Mesh::Mesh(const char* filename)
 {
-       vertices = NULL;
-       faces = NULL;
-       numVertices = 0;
-       numFaces = 0;
-
-       xmin = xmax = ymin = ymax = zmin = zmax = 0.0;
-
-       loadFromFile(filename);
-
-       //Finding bounding box...
-       for(register int i = 0; i < getNumberVertices(); i++){
-            if(vertices[i].getX() < xmin)
-                xmin = vertices[i].getX();
-            else if(vertices[i].getX() > xmax)
-                xmax = vertices[i].getX();
-
-            if(vertices[i].getY() < ymin)
-                ymin = vertices[i].getY();
-            else if(vertices[i].getY() > ymax)
-                ymax = vertices[i].getY();
-
-            if(vertices[i].getZ() < zmin)
-                zmin = vertices[i].getZ();
-            else if(vertices[i].getZ() > zmax)
-                zmax = vertices[i].getZ();
-       }
-
-       diag = sqrt((xmax - xmin)*(xmax - xmin) + (ymax - ymin)*(ymax - ymin) + (zmax - zmin)*(zmax - zmin));
+    loadfile(filename);
 }
 
-Mesh::~Mesh(){
-        cleanMesh();
+Mesh::~Mesh()
+{
+    if (V)
+        delete [] V;
 }
 
-//Clean up the object
-void Mesh::cleanMesh(){
-    if(faces){
-               delete[] faces;
-               faces = NULL;
-         }
-    if(vertices){
-               delete[] vertices;
-               vertices = NULL;
-         }
-}
+void Mesh::loadfile(const char* filename)
+{
+    ifstream FILE(filename);
+    if (FILE.is_open())
+    {
+        string format;
+        getline(FILE, format);
+        assert(format.find("OFF") != string::npos);
 
+        FILE >> nVertices >> nFaces >> nEdges;
 
-void Mesh::loadFromFile(const char* filename){
+        //this->F = new Face[nFaces];
+        this->V = new Vertex[nVertices];
 
-    int numEdges;
+        for( unsigned int i = 0; i < nVertices; i++)
+        {
+            double x,y,z;
+            FILE >> x >> y >> z;
 
-    ifstream in(filename);
+            V[i].setx(x); V[i].sety(y);V[i].setz(z);
+            V[i].setIndex(i);
+        }
 
-    string format;
-    getline(in, format);
-    assert(format.find("OFF") != string::npos);
+        for(unsigned int i = 0; i < nFaces; i++)
+        {
+            vector <unsigned int> v;
+            F.push_back(v);
+        }
 
-    in>>numVertices>>numFaces>>numEdges;
-    skipline(in);
+        vector<vector <unsigned int>>::iterator it;
+        for (it = F.begin(); it != F.end(); it++)
+        {
+            uint p0, p1, p2;
+            FILE >> p0 >> p1 >> p2;
+            (*it).push_back(p0);
+            (*it).push_back(p1);
+            (*it).push_back(p2);
+        }
+        /*
+         *
 
-    vertices = new Vertex[numVertices];
-    faces = new Face[numFaces];
+        F[i].push_back(p0); F[i].addVertex(p1); F[i].addVertex(p2);
 
+        V[p0].addVertex(p1); V[p0].addVertex(p2);
+        V[p1].addVertex(p0); V[p1].addVertex(p2);
+        V[p2].addVertex(p0); V[p2].addVertex(p1);
 
-    for(register int i = 0; i < numVertices; i++){
-        double x, y, z;
-        in>>x>>y>>z;
-        skipline(in);
-
-        vertices[i].setX(x);	vertices[i].setY(y);	vertices[i].setZ(z);
-        vertices[i].setIndex(i);
+        V[p0].addFace(i); V[p1].addFace(i); V[p2].addFace(i);*/
+        FILE.close();
     }
-
-
-    for(register int i = 0;  i < numFaces; i++){
-        int numVert;
-        in >> numVert;
-
-        assert(numVert == 3);
-
-        int p1, p2, p3;
-
-        in>>p1>>p2>>p3;
-        skipline(in);
-
-        faces[i].addVertex(p1);				faces[i].addVertex(p2);				faces[i].addVertex(p3);
-
-        vertices[p1].addFace(i);			vertices[p2].addFace(i);			vertices[p3].addFace(i);
-
-        vertices[p1].addVertex(p2);	vertices[p1].addVertex(p3);
-        vertices[p2].addVertex(p1);	vertices[p2].addVertex(p3);
-        vertices[p3].addVertex(p1);	vertices[p3].addVertex(p2);
-    }
-
-    in.close();
-
+    else
+        cout << "can't open " << filename << endl;
 }
 
-ostream& operator<<(ostream& os, Mesh& obj){
-         os<<"OFF"<<endl;
-         os<<obj.getNumberVertices()<<" "<<obj.getNumFaces()<<" "<<0<<endl;
-         for(int i = 0; i<obj.getNumberVertices(); i++){
-             os<<obj.vertices[i].getX()<<" "<<obj.vertices[i].getY()<<" "<<obj.vertices[i].getZ()<<endl;
-         }
-         for(int i = 0; i < obj.getNumFaces(); i++){
-                os<<3<<" ";
-                vector<int> vert = obj.faces[i].getVertices();
-                for(int j = 0; j < (vert.size() - 1); j++){
-                    os<<vert[j]<<" ";
-                }
-                os<<vert[vert.size()-1]<<endl;
-         }
-         return os;
- }
+void Mesh::displayVerts()
+{
+    for (unsigned int i = 0; i < nVertices; i++)
+    {
+        cout << "V" << i << ": " << V[i].getx() << ", " << V[i].gety() << ", " << V[i].getz() << endl;
+    }
+}
+void Mesh::displayFaces()
+{
+    vector <vector <unsigned int>>::iterator it;
+    for (it = F.begin(); it != F.end(); it++)
+    {
+        cout << "F" << endl;
+        for (unsigned int i = 0; i < 3; i++)
+        cout << (*it).at(i) << ", ";
+        cout << endl;
+    }
+}
+

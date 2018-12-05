@@ -1,106 +1,76 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
-
-#include "Face.h"
 #include <iostream>
 #include <vector>
 #include <queue>
 #include <set>
 
-#include <CGAL/basic.h>
-#include <CGAL/Search_traits.h>
-#include <CGAL/point_generators_3.h>
-#include <CGAL/Orthogonal_k_neighbor_search.h>
-
 using namespace std;
+typedef unsigned int uint;
+//class Face;
+class Vertex
+{
+    private:
+    uint index;
+    bool mark, isInterest;
+    vector <uint> faces;
+    set<uint> adjacentVertices;
 
-class Face;
+    int depth;
+    double response;
+    uint numNeighbors;
+    double v[3];
+    public:
 
-        class Vertex{
-                private:
+    Vertex(){v[0] = v[1] = v[2] = 0;}
+    Vertex(double x, double y, double z){v[0] = x; v[1] = y; v[2] = z;mark = false; depth = 0;isInterest = 0;}
 
-                        int index;
-                        bool mark;
-                        bool isInterest;
-                        vector<int> faces;
-                        set<int> adjacentVertices;
+    double x() const { return v[ 0 ]; }
+    double y() const { return v[ 1 ]; }
+    double z() const { return v[ 2 ]; }
 
-                        int depth;
-                        double response;
-                        int numNeighbors;
+    double& x() { return v[ 0 ]; }
+    double& y() { return v[ 1 ]; }
+    double& z() { return v[ 2 ]; }
 
-                public:
-                        double v[3];
-                        Vertex() {v[0] = v[1] = v[2] = 0; mark = false; depth = 0;isInterest = 0;}  // constructor by default : value = 0
-                        Vertex(double x1, double y1, double z1) {v[0] = x1; v[1] = y1; v[2] = z1;mark = false; depth = 0;isInterest = 0;}   // constructor
+    double getx(){return v[0];}
+    double gety(){return v[1];}
+    double getz(){return v[2];}
 
-                        double x() const { return v[ 0 ]; }     // return values as constants
-                        double y() const { return v[ 1 ]; }
-                        double z() const { return v[ 2 ]; }
+    void setx(double x){v[0] = x;}
+    void sety (double y){v[1] = y;}
+    void setz(double z){{v[2] = z;}}
 
-                        double& x() { return v[ 0 ]; }      // return values by reference
-                        double& y() { return v[ 1 ]; }
-                        double& z() { return v[ 2 ]; }
+    bool operator==(const Vertex& p) const
+    {
+        return (x() == p.x()) && (y() == p.y()) && (z() == p.z())  ;
+    }
 
-                        double getX() {return v[0];}        // return values
-                        double getY() {return v[1];}
-                        double getZ() {return v[2];}
+    bool  operator!=(const Vertex& p) const { return ! (*this == p); }
 
-                        void setX(double x1) {v[0] = x1;}
-                        void setY(double y1) {v[1] = y1;}
-                        void setZ(double z1) {v[2] = z1;}
+    friend ostream& operator<<(ostream& out, Vertex& point);
 
-                        bool operator==(const Vertex& p) const
-                        {
-                            return (x() == p.x()) && (y() == p.y()) && (z() == p.z())  ;
-                        }
+    void setVertex(double x1, double y1, double z1){v[0] = x1; v[1] = y1; v[2] = z1;}
+    void setIndex(uint ind){index = ind;}
+    uint getIndex(){return index;}
+    bool isMarked(){return mark;}
+    void setMark(bool mark1){mark = mark1;}
+    int getDepth(){ return depth;}
+    void setDepth(int dep){ depth = dep;}
+    double getResponse(){return response;}
+    void setResponse(double resp){response = resp;}
+    bool getInterest(){return isInterest;}
 
-                        bool  operator!=(const Vertex& p) const { return ! (*this == p); }
+    void getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices);
+    int getRadius(Vertex* vertices, double radius, vector<Vertex*>& V);
 
-                        friend ostream& operator<<(ostream& out, Vertex& point);
+    void addVertex(uint V){adjacentVertices.insert(V);}
+    void addFace(uint face){faces.push_back(face); }
+    void processMaximum(Vertex* vertices, int numRings);
+    vector<uint> getFaces(){ return faces;}
+    set<uint> getAdjacentVertices(){return adjacentVertices;}
 
-                        void setVertex(double x1, double y1, double z1){v[0] = x1; v[1] = y1; v[2] = z1;}
-                        void setIndex(int ind){index = ind;}
-                        int getIndex(){return index;}
-                        bool isMarked(){return mark;}
-                        void setMark(bool mark1){mark = mark1;}
-                        int getDepth(){ return depth;}
-                        void setDepth(int dep){ depth = dep;}
-                        double getResponse(){return response;}
-                        void setResponse(double resp){response = resp;}
-                        bool getInterest(){return isInterest;}
-
-                        void getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices);
-                        int getRadius(Vertex* vertices, double radius, vector<Vertex*>& V);
-
-
-                        void addVertex(int vertex){ adjacentVertices.insert(vertex);}   // add a vertex between two adjacent vertices
-                        void addFace(int face){ faces.push_back(face); }
-                        void processMaximum(Vertex* vertices, int numRings);
-                        vector<int>& getFaces(){ return faces;}
-                        set<int>& getAdjacentVertices() { return adjacentVertices;}
-        };
-
-namespace CGAL {        // Kernel is useless here. This is certainly a rest of an old code.
-
-  template <>
-  struct Kernel_traits<Vertex> {
-    struct Kernel {
-      typedef double FT;
-      typedef double RT;
-    };
-  };
-}
-
-
-struct Construct_coord_iterator {
-  const double* operator()(const Vertex& p) const
-  { return static_cast<const double*>(p.v); }
-
-  const double* operator()(const Vertex& p, int)  const
-  { return static_cast<const double*>(p.v+3); }
 };
-
 
 #endif // VERTEX_H

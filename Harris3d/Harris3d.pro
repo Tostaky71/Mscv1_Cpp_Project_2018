@@ -4,15 +4,18 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp \
-    HarrisDetector.cpp \
-    Mesh.cpp \
-    Properties.cpp \
-    Vertex.cpp
+    harrisdetector.cpp \
+    mesh.cpp \
+    properties.cpp \
+    vertex.cpp \
+    utility.cpp \
+    main.cpp \
+    face.cpp
 
 HEADERS += \
-    Face.h \
-    HarrisDetector.h \
-    Mesh.h \
-    Properties.h \
-    Vertex.h
+    harrisdetector.h \
+    mesh.h \
+    properties.h \
+    vertex.h \
+    utility.h \
+    face.h

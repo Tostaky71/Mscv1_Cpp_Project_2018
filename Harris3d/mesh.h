@@ -1,47 +1,26 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "Vertex.h"
-#include "Face.h"
-#include <vector>
+#include "face.h"
+#include "vertex.h"
 
-using namespace std;
+class Mesh
+{
+    private:
+    Vertex* V;
+ //   Face* F;
 
-class Mesh{
+    vector<vector <unsigned int>> F;
 
-      //Topological information
-      Vertex* vertices;
-      Face* faces;
+    unsigned int nVertices, nFaces, nEdges;
 
-      int numVertices;
-      int numFaces;
-
-      float** D;
-
-      //BBox Information
-      double xmin, xmax, ymin, ymax, zmin, zmax;
-      double diag;
-
-
-      public:
-            void cleanMesh();
-
-             Mesh();
-             Mesh(const char* nombreArchivo);
-             ~Mesh();
-
-             void loadFromFile(const char* filename);
-
-             friend ostream& operator<<(ostream& os, Mesh &obj);
-             Vertex* getVertices(){return vertices;}
-             Face* getFaces(){return faces;}
-
-             int getNumberVertices(){return numVertices;}
-             int getNumFaces(){return numFaces;}
-
-             double getDiagonal(){return diag;}
-
+    public:
+    Mesh();
+    Mesh(const char* filename);
+    ~Mesh();
+    void loadfile(const char* filename);
+    void displayVerts();
+    void displayFaces();
 };
-
 
 #endif // MESH_H
