@@ -15,7 +15,7 @@ class Vertex
     uint index;
     bool mark, isInterest;
     vector <uint> faces;
-    set<uint> adjacentVertices;
+    set<uint> neighbours;// 252
 
     int depth;
     double response;
@@ -62,14 +62,13 @@ class Vertex
     void setResponse(double resp){response = resp;}
     bool getInterest(){return isInterest;}
 
-    void getNeighborhood(int rad, vector<Vertex*>& V, Vertex* vertices);
+    set<unsigned int> getNeighborhood(int rad, double crit, vector<Vertex>&Ver);
     int getRadius(Vertex* vertices, double radius, vector<Vertex*>& V);
 
-    void addVertex(uint V){adjacentVertices.insert(V);}
+    void addVertex(uint V){neighbours.insert(V);}
     void addFace(uint face){faces.push_back(face); }
-    void processMaximum(Vertex* vertices, int numRings);
     vector<uint> getFaces(){ return faces;}
-    set<uint> getAdjacentVertices(){return adjacentVertices;}
+    set<uint> getneighbours(){return neighbours;}
 
 };
 
