@@ -17,8 +17,6 @@ Mesh::Mesh(const char* filename)
 
 Mesh::~Mesh()
 {
-    if (V)
-        delete [] V;
 }
 
 void Mesh::loadfile(const char* filename)
@@ -32,43 +30,24 @@ void Mesh::loadfile(const char* filename)
 
         FILE >> nVertices >> nFaces >> nEdges;
 
-        //this->F = new Face[nFaces];
-        this->V = new Vertex[nVertices];
-
-        for( unsigned int i = 0; i < nVertices; i++)
+        for(unsigned int i = 0; i < nVertices; i++)
         {
             double x,y,z;
             FILE >> x >> y >> z;
-
-            V[i].setx(x); V[i].sety(y);V[i].setz(z);
-            V[i].setIndex(i);
+            Vertex ver(x,y,z);
+            V.push_back(ver);
         }
 
         for(unsigned int i = 0; i < nFaces; i++)
         {
             vector <unsigned int> v;
-            F.push_back(v);
-        }
-
-        vector<vector <unsigned int>>::iterator it;
-        for (it = F.begin(); it != F.end(); it++)
-        {
             uint p0, p1, p2;
             FILE >> p0 >> p1 >> p2;
-            (*it).push_back(p0);
-            (*it).push_back(p1);
-            (*it).push_back(p2);
+            v.push_back(p0);
+            v.push_back(p1);
+            v.push_back(p2);
+            F.push_back(v);
         }
-        /*
-         *
-
-        F[i].push_back(p0); F[i].addVertex(p1); F[i].addVertex(p2);
-
-        V[p0].addVertex(p1); V[p0].addVertex(p2);
-        V[p1].addVertex(p0); V[p1].addVertex(p2);
-        V[p2].addVertex(p0); V[p2].addVertex(p1);
-
-        V[p0].addFace(i); V[p1].addFace(i); V[p2].addFace(i);*/
         FILE.close();
     }
     else

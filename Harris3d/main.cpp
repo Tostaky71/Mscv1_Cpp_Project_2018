@@ -5,11 +5,11 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    cout <<"build" << endl;
-    Mesh M("/home/blue/testmesh.off");
+    cout << argc;
+    Mesh M("/home/blue/null.off");
     M.displayVerts();
-    M.displayFaces();
+    //M.displayFaces();
     return 0;
 }

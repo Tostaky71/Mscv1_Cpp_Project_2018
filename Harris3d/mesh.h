@@ -7,8 +7,7 @@
 class Mesh
 {
     private:
-    Vertex* V;
- //   Face* F;
+    vector<Vertex> V;
 
     vector<vector <unsigned int>> F;
 
