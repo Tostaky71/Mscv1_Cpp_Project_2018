@@ -69,8 +69,8 @@ class Vertex
 
     void addVertex(uint V){neighbours.insert(V);}
     void addFace(uint face){faces.push_back(face); }
-    vector<uint> getFaces(){ return faces;}
-    set<uint> getneighbours(){return neighbours;}
+    vector<uint> getFaces(){return this->faces;}
+    set<uint> getneighbours(){return this->neighbours;}
 
     void display();
 

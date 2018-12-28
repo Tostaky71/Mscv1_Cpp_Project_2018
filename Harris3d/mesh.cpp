@@ -43,10 +43,15 @@ void Mesh::loadfile(const char* filename)
             vector <unsigned int> v;
             uint p0, p1, p2;
             FILE >> p0 >> p1 >> p2;
+            p0--; p1--; p2--;
             v.push_back(p0);
             v.push_back(p1);
             v.push_back(p2);
             F.push_back(v);
+
+            V[p0].addFace(i); V[p0].addVertex(p1); V[p0].addVertex(p2);
+            V[p1].addFace(i); V[p1].addVertex(p0); V[p1].addVertex(p2);
+            V[p2].addFace(i); V[p2].addVertex(p0); V[p2].addVertex(p1);
         }
         FILE.close();
     }
@@ -56,10 +61,9 @@ void Mesh::loadfile(const char* filename)
 
 void Mesh::displayVerts()
 {
-    vector<Vertex>::iterator it;
-    for (it = V.begin(); it != V.end(); it++)
+    for (unsigned int i = 0; i < nVertices; i++)
     {
-        (*it).display();
+        cout << "V" << i << ": " << V[i].getx() << ", " << V[i].gety() << ", " << V[i].getz() << endl;
     }
 }
 void Mesh::displayFaces()

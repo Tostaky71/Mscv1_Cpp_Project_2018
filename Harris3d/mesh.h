@@ -14,6 +14,7 @@ class Mesh
     unsigned int nVertices, nFaces, nEdges;
 
     public:
+
     Mesh();
     Mesh(const char* filename);
     ~Mesh();
