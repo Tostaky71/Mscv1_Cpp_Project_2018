@@ -8,7 +8,9 @@
 
 using namespace std;
 typedef unsigned int uint;
-//class Face;
+
+class Vertex;
+void operator <<(std::ostream &out, Vertex V);
 class Vertex
 {
     private:
@@ -69,6 +71,8 @@ class Vertex
     void addFace(uint face){faces.push_back(face); }
     vector<uint> getFaces(){ return faces;}
     set<uint> getneighbours(){return neighbours;}
+
+    void display();
 
 };
 

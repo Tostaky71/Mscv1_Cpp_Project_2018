@@ -56,9 +56,10 @@ void Mesh::loadfile(const char* filename)
 
 void Mesh::displayVerts()
 {
-    for (unsigned int i = 0; i < nVertices; i++)
+    vector<Vertex>::iterator it;
+    for (it = V.begin(); it != V.end(); it++)
     {
-        cout << "V" << i << ": " << V[i].getx() << ", " << V[i].gety() << ", " << V[i].getz() << endl;
+        (*it).display();
     }
 }
 void Mesh::displayFaces()

@@ -19,3 +19,14 @@ set<unsigned int> Vertex::getNeighborhood(int rad, double crit, vector<Vertex>&V
     }
     return N;
 }
+
+void Vertex::display()
+{
+    std::cout << this->x() << ", " << this->y() << ", " << this->z() << endl;
+}
+
+
+void operator <<(std::ostream &out, Vertex V)
+{
+    V.display();
+}
