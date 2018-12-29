@@ -12,6 +12,9 @@ class Mesh
     vector<vector <unsigned int>> F;
 
     unsigned int nVertices, nFaces, nEdges;
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+
+    double diag;
 
     public:
 
@@ -21,6 +24,13 @@ class Mesh
     void loadfile(const char* filename);
     void displayVerts();
     void displayFaces();
+
+    vector<Vertex> getVertices();
+    vector<vector <unsigned int>> getFaces();
+
+    double getDiag(){return diag;}
+
+
 };
 
 #endif // MESH_H

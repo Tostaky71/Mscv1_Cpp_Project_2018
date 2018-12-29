@@ -19,3 +19,6 @@ HEADERS += \
     vertex.h \
     utility.h \
     face.h
+
+
+INCLUDEPATH += /home/blue/eigen

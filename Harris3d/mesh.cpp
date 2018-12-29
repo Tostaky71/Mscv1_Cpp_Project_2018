@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cassert>
 #include <fstream>
+#include <cmath>
 
 using namespace std;
 Mesh::Mesh()
@@ -13,6 +14,27 @@ Mesh::Mesh()
 Mesh::Mesh(const char* filename)
 {
     loadfile(filename);
+
+    xmin = xmax = ymin=  ymax= zmin= zmax=0;
+
+    vector<Vertex>::iterator it;
+    for (it = V.begin(); it != V.end(); it++)
+    {
+        if (xmin > (*it).x())
+            xmin = (*it).x();
+        if (ymin > (*it).y())
+            ymin = (*it).y();
+        if (zmin > (*it).z())
+            zmin = (*it).z();
+
+        if (xmax < (*it).x())
+            xmax = (*it).x();
+        if (ymax < (*it).y())
+            ymax = (*it).y();
+        if (zmax < (*it).z())
+            zmax = (*it).z();
+    }
+    diag = sqrt(pow((xmax - xmin),2) + pow((ymax-ymin),2) + pow((zmax-zmin),2));
 }
 
 Mesh::~Mesh()
@@ -78,3 +100,12 @@ void Mesh::displayFaces()
     }
 }
 
+
+vector<Vertex> Mesh::getVertices()
+{
+    return this->V;
+}
+vector<vector <unsigned int>> Mesh::getFaces()
+{
+    return this->F;
+}
