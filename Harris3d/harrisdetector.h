@@ -11,8 +11,8 @@ class HarrisDetector
     Mesh obj;
 
     int typeNei;
-    int ringNeighbourhood;
-
+    int ringNeighbourhood, numRingDetect;
+    double fractionDiagonal;
     double k;
 
     int typeSelection;

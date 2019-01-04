@@ -13,8 +13,12 @@ bool RESPONSECOMP(Vertex i, Vertex j){
 HarrisDetector::HarrisDetector()
 {
     ringNeighbourhood  = 1;
+    numRingDetect = 1;
     typeNei = RING;
     k = 0.04;
+    fractionDiagonal = 0.01;
+    typeSelection = FRACTION;
+
 
 }
 
@@ -22,9 +26,10 @@ HarrisDetector::HarrisDetector(Mesh& mesh)
 {
     this->obj = mesh;
     ringNeighbourhood = 1;
+    numRingDetect = 1;
     typeNei = RING;
     k = 0.04;
-
+    fractionDiagonal = 0.01;
     typeSelection = FRACTION;
     paramSelection = 0.01;
 }
@@ -47,19 +52,19 @@ vector<Vertex> HarrisDetector::getInterestPoints()
     vector<Vertex>::iterator it;
     for (it = Vertices.begin(); it != Vertices.end(); it++)
     {
+        //cout << "iteration " << cont << endl;
         set<uint> neighbours;
-        neighbours = (*it).getNeighborhood(ringNeighbourhood,Vertices);
-
-        if(neighbours.size() < 6)
-        {
-            cont ++;
-        }
+        if (typeNei == RING)
+            neighbours = (*it).getNeighborhood(ringNeighbourhood,Vertices);
+        else if(typeNei == ADAPTIVE)
+            rad = (*it).getRadius(Vertices,diag*fractionDiagonal, neighbours);
         // calculating the centroid
-
+        //cout << "calculating the centroid" << endl;
         double xc = 0, yc = 0 , zc = 0;
 
         set<uint>::iterator it2;
         vector<Vertex> neighb_set;
+        //cout << "retrieving the set of neighbours" << endl;
         for (it2 = neighbours.begin(); it2 != neighbours.end();it2++)
         {
             neighb_set.push_back(Vertices[(*it2)]);
@@ -73,6 +78,7 @@ vector<Vertex> HarrisDetector::getInterestPoints()
         yc /= neighbours.size();
         zc /= neighbours.size();
         // shifting all values according to the centroid
+        //cout << "shift" << endl;
         vector<Vertex>::iterator it3;
         for (it3 = neighb_set.begin(); it3 != neighb_set.end(); it3++)
         {
@@ -82,7 +88,7 @@ vector<Vertex> HarrisDetector::getInterestPoints()
         }
         // covariance matrix computation
         Matrix3d A;
-
+        //cout << "covariance matrix" << endl;
         for (it3 = neighb_set.begin(); it3 != neighb_set.end(); it3++)
         {
             double x = (*it3).x(), y = (*it3).y(), z = (*it3).z();
@@ -100,6 +106,7 @@ vector<Vertex> HarrisDetector::getInterestPoints()
                 A(i,j) /= neighb_set.size();
 
         // computing eigen vectors
+        //cout << "calculating eigen vectors" << endl;
         SelfAdjointEigenSolver<Matrix3d> eigensolver(A);
         if (eigensolver.info() == Success)
         {
@@ -230,31 +237,41 @@ vector<Vertex> HarrisDetector::getInterestPoints()
 
             double resp = FX2 * FY2 - FXFY * FXFY - this->k*(FX2 + FY2) * (FX2+FY2) ;
             (*it).setResponse(resp);
+            //cout << resp << endl;
 
             if (resp > max)
                 max = resp;
         }
-
-        vector<Vertex> candidates;
-
-        for (it = Vertices.begin(); it != Vertices.end(); it++)
-        {
-            if(it->getInterest())
-                candidates.push_back(*it);
-        }
-
-        sort(candidates.begin(), candidates.end(), RESPONSECOMP);
-
-        if (typeSelection == FRACTION)
-        {
-            int numPoints = int(paramSelection * obj.getVertices().size());
-            for (it = candidates.begin(); it != candidates.begin()+numPoints; it++)
-            interestPoints.push_back(*it);
-        }
-
+        cont++;
     }
-
-
-
+    vector<Vertex> candidates;
+    cont = 0;
+    for (it = Vertices.begin(); it != Vertices.end(); it++)
+    {
+        cout << cont << endl;
+        (*it).processMax(Vertices);
+        if(it->getInterest())
+        {
+            cout << "oh that's interesting" << endl;
+            candidates.push_back(*it);
+        }
+        cont ++;
+    }
+    cout << candidates.size();
+    sort(candidates.begin(), candidates.end(), RESPONSECOMP);
+    if (typeSelection == FRACTION)
+    {
+        double f = (1 / paramSelection);
+         long fl = long(f);
+         long plzwork = Vertices.size();
+         long numPoints = plzwork/fl;
+        if(candidates.size() > numPoints)
+            for (it = candidates.begin(); it != candidates.begin() + numPoints; it++)
+                interestPoints.push_back(*it);
+        else
+        interestPoints = candidates;
+    }
+    cout << "?"<< endl;
+    cout << interestPoints.size() << endl;
     return interestPoints;
 }

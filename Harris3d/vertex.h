@@ -65,7 +65,7 @@ class Vertex
     bool getInterest(){return isInterest;}
 
     set<unsigned int> getNeighborhood(int rad, vector<Vertex>&Ver);
-    int getRadius(Vertex* vertices, double radius, vector<Vertex*>& V);
+    int getRadius(vector<Vertex>& vertices, double radius, set<uint>& Voutput);
 
     void addVertex(uint V){neighbours.insert(V);}
     void addFace(uint face){faces.push_back(face); }
@@ -73,8 +73,7 @@ class Vertex
     set<uint> getneighbours(){return this->neighbours;}
 
     void display();
-
-    void processMax(vector<Vertex> Ver, int numRings);
+    void processMax(vector<Vertex>& Ver);
 
 };
 

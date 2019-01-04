@@ -20,6 +20,11 @@ set<unsigned int> Vertex::getNeighborhood(int rad, vector<Vertex>&Ver)
     return N;
 }
 
+int Vertex::getRadius(vector<Vertex>& vertices, double radius, set<uint>& Voutput)
+{
+    return 0;
+}
+
 void Vertex::display()
 {
     std::cout << this->x() << ", " << this->y() << ", " << this->z() << endl;
@@ -33,7 +38,7 @@ void operator <<(std::ostream &out, Vertex V)
 
 
 
-void Vertex::processMax(vector<Vertex> Ver, int numRings)
+void Vertex::processMax(vector<Vertex>& Ver)
 {
     set<unsigned int>::iterator it;
     for (it = neighbours.begin(); it != neighbours.end(); it++)
