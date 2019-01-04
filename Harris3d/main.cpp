@@ -2,7 +2,6 @@
 #include <fstream>
 #include "utility.h"
 #include "mesh.h"
-#include <Eigen/Eigen>
 #include "harrisdetector.h"
 
 using namespace std;

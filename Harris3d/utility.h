@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "vertex.h"
+
 using namespace std;
 
 void Pause();

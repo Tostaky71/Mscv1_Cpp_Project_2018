@@ -10,14 +10,25 @@ class HarrisDetector
     private:
     Mesh obj;
 
+    int typeNei;
     int ringNeighbourhood;
 
+    double k;
+
+    int typeSelection;
+    double paramSelection;
+
+
     public:
+
+    enum TYPENEI{RING, SPACIAL, ADAPTIVE};
+    enum TYPESELEC{FRACTION, CLUSTERING};
+
     HarrisDetector();
     HarrisDetector(Mesh& mesh);
     ~HarrisDetector();
 
-    map<uint, uint> getInterestPoints();
+    vector<Vertex> getInterestPoints();
 
 };
 
