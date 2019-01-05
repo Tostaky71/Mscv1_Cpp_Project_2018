@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "face.h"
+#include <vector>
 #include "vertex.h"
 
 class Mesh
@@ -29,8 +29,6 @@ class Mesh
     vector<vector <unsigned int>> getFaces();
 
     double getDiag(){return diag;}
-
-
 };
 
 #endif // MESH_H

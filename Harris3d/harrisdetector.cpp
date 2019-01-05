@@ -13,7 +13,6 @@ bool RESPONSECOMP(Vertex i, Vertex j){
 HarrisDetector::HarrisDetector()
 {
     ringNeighbourhood  = 1;
-    numRingDetect = 1;
     typeNei = RING;
     k = 0.04;
     fractionDiagonal = 0.01;
@@ -26,12 +25,83 @@ HarrisDetector::HarrisDetector(Mesh& mesh)
 {
     this->obj = mesh;
     ringNeighbourhood = 1;
-    numRingDetect = 1;
     typeNei = RING;
     k = 0.04;
     fractionDiagonal = 0.01;
     typeSelection = FRACTION;
     paramSelection = 0.01;
+}
+
+HarrisDetector::HarrisDetector(Mesh& mesh, Property &prop)
+{
+    this->obj = mesh;
+
+    map<string, string>::iterator it;
+
+    string val = prop.getProperty("neibourhood");
+    if(!val.empty()){
+        if(val == "RING")
+        {
+            typeNei = RING;
+        }
+        else if(val == "ADAPTIVE")
+        {
+            typeNei = ADAPTIVE;
+        }
+    }
+    else
+        val = RING;
+
+    val = prop.getProperty("nbRings");
+    if(!val.empty()){
+        if (atoi(val.c_str()) > 0)
+            ringNeighbourhood = atoi(val.c_str());
+        else
+            ringNeighbourhood = 1;
+    }
+    else
+        ringNeighbourhood = 1;
+    val = prop.getProperty("fractionDiagonal");
+
+    if(!val.empty()){
+        if (atof(val.c_str()) > 0)
+            fractionDiagonal = atof(val.c_str());
+        else
+            fractionDiagonal = 0.01;
+    }
+    else
+        fractionDiagonal = 0.01;
+
+    val = prop.getProperty("k");
+    if(!val.empty()){
+        if (atof(val.c_str()) > 0)
+            k = atof(val.c_str());
+        else
+            k = 0.04;
+    }
+    else
+        k = 0.04;
+    val = prop.getProperty("typeSelection");
+    if(!val.empty()){
+        if(val == "FRACTION")
+            typeSelection = FRACTION;
+        else if (val == "CLUSTERING")
+            typeSelection = CLUSTERING;
+        else
+            typeSelection = FRACTION;
+    }
+    else
+        typeSelection = FRACTION;
+    val = prop.getProperty("paramSelection");
+
+    if(!val.empty()){
+        if (atof(val.c_str()) > 0)
+            paramSelection = atoi(val.c_str());
+        else
+            paramSelection = 0.01;
+    }
+    else
+        paramSelection = 0.01;
 }
 
 HarrisDetector::~HarrisDetector()
@@ -43,7 +113,7 @@ vector<Vertex> HarrisDetector::getInterestPoints()
 {
    vector<Vertex> interestPoints;
 
-    double max =0.0; int rad = 0;
+    double max =0.0;
     double diag = obj.getDiag();
 
     vector<Vertex> Vertices = obj.getVertices();
@@ -57,7 +127,7 @@ vector<Vertex> HarrisDetector::getInterestPoints()
         if (typeNei == RING)
             neighbours = (*it).getNeighborhood(ringNeighbourhood,Vertices);
         else if(typeNei == ADAPTIVE)
-            rad = (*it).getRadius(Vertices,diag*fractionDiagonal, neighbours);
+            neighbours = (*it).getRadius(Vertices,diag*fractionDiagonal);
         // calculating the centroid
         //cout << "calculating the centroid" << endl;
         double xc = 0, yc = 0 , zc = 0;
@@ -263,6 +333,26 @@ vector<Vertex> HarrisDetector::getInterestPoints()
                 interestPoints.push_back(*it);
         else
         interestPoints = candidates;
+    }
+    else if(typeSelection == CLUSTERING)
+    {
+        cout << "Clustering selection" << endl;
+        for (it = candidates.begin(); it != candidates.end(); it++)
+        {
+            bool found = false;
+            unsigned int i = 0;
+            while (i < interestPoints.size() && found == false)
+            {
+                double X = interestPoints[i].x() - it->x();
+                double Y = interestPoints[i].y() - it->y();
+                double Z = interestPoints[i].z() - it->z();
+                i++;
+                if(sqrt(X*X + Y*Y + Z*Z) < (diag*paramSelection))
+                    found = true;
+            }
+            if (found == false)
+                interestPoints.push_back(*it);
+        }
     }
     return interestPoints;
 }

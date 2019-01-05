@@ -22,3 +22,4 @@ HEADERS += \
 
 
 INCLUDEPATH += 'C:\Qt Libraries\eigen\eigen'
+INCLUDEPATH += /home/blue/eigen

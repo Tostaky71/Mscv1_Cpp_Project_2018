@@ -57,7 +57,9 @@ void Mesh::loadfile(const char* filename)
             double x,y,z;
             FILE >> x >> y >> z;
             Vertex ver(x,y,z);
+            ver.setIndex(i);
             V.push_back(ver);
+
         }
 
         for(unsigned int i = 0; i < nFaces; i++)

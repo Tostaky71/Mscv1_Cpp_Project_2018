@@ -2,6 +2,7 @@
 #define HARRISDETECTOR_H
 
 #include "mesh.h"
+#include "properties.h"
 #include <map>
 #include <Eigen/Dense>
 
@@ -11,7 +12,7 @@ class HarrisDetector
     Mesh obj;
 
     int typeNei;
-    int ringNeighbourhood, numRingDetect;
+    int ringNeighbourhood;
     double fractionDiagonal;
     double k;
 
@@ -21,11 +22,12 @@ class HarrisDetector
 
     public:
 
-    enum TYPENEI{RING, SPACIAL, ADAPTIVE};
+    enum TYPENEI{RING, ADAPTIVE};
     enum TYPESELEC{FRACTION, CLUSTERING};
 
     HarrisDetector();
     HarrisDetector(Mesh& mesh);
+    HarrisDetector(Mesh& mesh, Property& prop);
     ~HarrisDetector();
 
     vector<Vertex> getInterestPoints();

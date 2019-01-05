@@ -3,6 +3,8 @@
 #include <cmath>
 #include <map>
 #include "utility.h"
+#include <Eigen/Dense>
+using namespace Eigen;
 
 set<unsigned int> Vertex::getNeighborhood(int rad, vector<Vertex>&Ver)
 {
@@ -20,9 +22,28 @@ set<unsigned int> Vertex::getNeighborhood(int rad, vector<Vertex>&Ver)
     return N;
 }
 
-int Vertex::getRadius(vector<Vertex>& vertices, double radius, set<uint>& Voutput)
+set<uint> Vertex::getRadius(vector<Vertex>& vertices, double radius)
 {
-    return 0;
+    set<uint> Voutput;
+    set <uint> N = this->getneighbours();
+    map<uint, double> distanceToThis;
+    set <uint>::iterator it;
+    Vector3d V(this->x(), this->y(), this->z());
+    for (it = N.begin(); it != N.end(); it++)
+    {
+        Vector3d V1(vertices[*it].x(),vertices[*it].y(), vertices[*it].z());
+        Vector3d diff = V - V1;
+        double distance = diff.norm();
+        distanceToThis[*it] = distance;
+        if (distance <= radius)
+        {
+            set<uint> temp;
+            Voutput.insert(*it);
+            temp = vertices[*it].getRadius(vertices, radius-distance);
+            Voutput.insert(temp.begin(), temp.end());
+        }
+    }
+    return Voutput;
 }
 
 void Vertex::display()

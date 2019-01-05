@@ -65,7 +65,7 @@ class Vertex
     bool getInterest(){return isInterest;}
 
     set<unsigned int> getNeighborhood(int rad, vector<Vertex>&Ver);
-    int getRadius(vector<Vertex>& vertices, double radius, set<uint>& Voutput);
+    set<uint> getRadius(vector<Vertex>& vertices, double radius);
 
     void addVertex(uint V){neighbours.insert(V);}
     void addFace(uint face){faces.push_back(face); }
