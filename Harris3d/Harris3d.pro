@@ -21,4 +21,4 @@ HEADERS += \
     face.h
 
 
-INCLUDEPATH += /home/blue/eigen
+INCLUDEPATH += 'C:\Qt Libraries\eigen\eigen'
