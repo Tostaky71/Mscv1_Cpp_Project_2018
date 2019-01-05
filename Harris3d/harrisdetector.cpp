@@ -43,7 +43,7 @@ vector<Vertex> HarrisDetector::getInterestPoints()
 {
    vector<Vertex> interestPoints;
 
-    double max =0.0; int rad = 0, cont = 0;
+    double max =0.0; int rad = 0;
     double diag = obj.getDiag();
 
     vector<Vertex> Vertices = obj.getVertices();
@@ -238,40 +238,31 @@ vector<Vertex> HarrisDetector::getInterestPoints()
             double resp = FX2 * FY2 - FXFY * FXFY - this->k*(FX2 + FY2) * (FX2+FY2) ;
             (*it).setResponse(resp);
             //cout << resp << endl;
-
             if (resp > max)
                 max = resp;
         }
-        cont++;
     }
     vector<Vertex> candidates;
-    cont = 0;
     for (it = Vertices.begin(); it != Vertices.end(); it++)
     {
-        cout << cont << endl;
         (*it).processMax(Vertices);
         if(it->getInterest())
         {
-            cout << "oh that's interesting" << endl;
             candidates.push_back(*it);
         }
-        cont ++;
     }
-    cout << candidates.size();
     sort(candidates.begin(), candidates.end(), RESPONSECOMP);
     if (typeSelection == FRACTION)
     {
         double f = (1 / paramSelection);
-         long fl = long(f);
-         long plzwork = Vertices.size();
-         long numPoints = plzwork/fl;
+        long fl = long(f);
+        long plzwork = Vertices.size();
+        long numPoints = plzwork/fl;
         if(candidates.size() > numPoints)
             for (it = candidates.begin(); it != candidates.begin() + numPoints; it++)
                 interestPoints.push_back(*it);
         else
         interestPoints = candidates;
     }
-    cout << "?"<< endl;
-    cout << interestPoints.size() << endl;
     return interestPoints;
 }

@@ -12,9 +12,9 @@ int main(int argc, char* argv[])
     //cout << argc << endl;
     Mesh M("/home/blue/0001.noise.4.off");
     HarrisDetector H(M);
-    cout << "stay hustling" << endl;
+    cout << "Calculating interest points..." << endl;
     vector<Vertex> V = H.getInterestPoints();
-    cout << V.size() << endl;
+    cout << "displaying" <<  V.size() << "points coordinates" <<endl;
     vector<Vertex>::iterator it;
     for (it = V.begin(); it != V.end(); it++)
         (*it).display();
