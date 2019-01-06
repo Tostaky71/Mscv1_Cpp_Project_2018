@@ -8,17 +8,13 @@ SOURCES += \
     mesh.cpp \
     properties.cpp \
     vertex.cpp \
-    utility.cpp \
     main.cpp \
-    face.cpp
 
 HEADERS += \
     harrisdetector.h \
     mesh.h \
     properties.h \
     vertex.h \
-    utility.h \
-    face.h
 
 
 INCLUDEPATH += 'C:\Qt Libraries\eigen\eigen'
