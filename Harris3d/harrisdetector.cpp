@@ -38,7 +38,7 @@ HarrisDetector::HarrisDetector(Mesh& mesh, Property &prop)
 
     map<string, string>::iterator it;
 
-    string val = prop.getProperty("neibourhood");
+    string val = prop.getProperty("neighbourhood");
     if(!val.empty()){
         if(val == "RING")
         {
