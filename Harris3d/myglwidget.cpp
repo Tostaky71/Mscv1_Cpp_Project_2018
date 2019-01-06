@@ -31,29 +31,17 @@ QSize MyGLWidget::sizeHint() const
 void MyGLWidget::wheelEvent(QWheelEvent *event)
 {
     int D = event->delta();
-    cout << D << endl;
     if (D > 0)
     {
-        cout <<"unzoom" << endl;
         zoomingFactor -= 0.0001;
     }
     else if (D < 0)
     {
-        cout <<"zoom" << endl;
         zoomingFactor += 0.0001;
     }
 
     resizeGL(width(), height());
 
-    /*
-    double side = qMax(height(), width());
-    glViewport((width() - side), (height() - side), side, side);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glScalef(zoomingFactor, zoomingFactor, zoomingFactor);
-    glMatrixMode(GL_MODELVIEW);
-
-    */
     refresh();
 }
 
@@ -130,7 +118,6 @@ void MyGLWidget::resizeGL(int width, int height)
 
 void MyGLWidget::draw()
 {
-    cout << "loops" << endl;
     vector<vector <uint>> :: iterator it;
     for (it = F.begin(); it != F.end(); it++)
     {
