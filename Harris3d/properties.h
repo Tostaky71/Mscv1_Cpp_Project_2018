@@ -1,7 +1,9 @@
 #ifndef PROPERTIES_H
 #define PROPERTIES_H
-#endif // PROPERTIES_H
-
+/*
+ * Properties.h is heavily based off of the source code of of Ivan Sipiran's implementation
+ * for more info see https://users.dcc.uchile.cl/~isipiran/harris3D.html
+ * */
 
 #include <map>
 #include <string>
@@ -21,3 +23,5 @@ class Property{
     std::string getProperty(std::string key);
 
 };
+
+#endif // PROPERTIES_H

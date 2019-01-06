@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include <map>
-#include "utility.h"
 #include <Eigen/Dense>
 using namespace Eigen;
 

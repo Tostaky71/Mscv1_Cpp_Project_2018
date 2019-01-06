@@ -1,5 +1,9 @@
 #ifndef MESH_H
 #define MESH_H
+/*
+ * Mesh.h is heavily based off of the source code of of Ivan Sipiran's implementation
+ * for more info see https://users.dcc.uchile.cl/~isipiran/harris3D.html
+ * */
 
 #include <vector>
 #include "vertex.h"

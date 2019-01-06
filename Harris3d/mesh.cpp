@@ -1,5 +1,4 @@
 #include "mesh.h"
-#include "utility.h"
 #include <iostream>
 #include <cassert>
 #include <fstream>

@@ -1,44 +1,41 @@
+#include <QApplication>
 #include <iostream>
 #include <fstream>
-#include "utility.h"
 #include "mesh.h"
 #include "harrisdetector.h"
+#include "myglwidget.h"
 
 using namespace std;
 using namespace Eigen;
 
-int main(int argc, char* argv[])
+
+int main(int argc, char *argv[])
 {
     string filename;
-    string options = "/home/blue/opt.txt";
+    string options;
     if(argc > 1)
         filename.assign(argv[1]);
     else
-        filename.assign("/home/blue/sampling.off");
+        filename.assign("./mesh.off");
 
     if (argc > 2)
         options.assign(argv[2]);
+    else
+        options.assign("./opt.txt");
 
     Property prop(options.c_str());
     Mesh M(filename.c_str());
+    HarrisDetector H;
     if (argc>2)
     {
-        HarrisDetector H(M, prop);
-        cout << "Calculating interest points..." << endl;
-        vector<Vertex> V = H.getInterestPoints();
-        cout << "displaying " <<  V.size() << " points' coordinates" <<endl;
-        vector<Vertex>::iterator it;
-        for (it = V.begin(); it != V.end(); it++)
-            (*it).display();
+        H = HarrisDetector(M, prop);
     }
     else{
-        HarrisDetector H(M);
-    cout << "Calculating interest points..." << endl;
-    vector<Vertex> V = H.getInterestPoints();
-    cout << "displaying " <<  V.size() << " points' coordinates" <<endl;
-    vector<Vertex>::iterator it;
-    for (it = V.begin(); it != V.end(); it++)
-        (*it).display();
+        H = HarrisDetector(M);
     }
-    return 0;
+
+    QApplication a(argc, argv);
+    MyGLWidget wi(H);
+    wi.show();
+    return a.exec();
 }

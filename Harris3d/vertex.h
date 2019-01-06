@@ -1,5 +1,9 @@
 #ifndef VERTEX_H
 #define VERTEX_H
+/*
+ * Vertex.h is heavily based off of the source code of of Ivan Sipiran's implementation
+ * for more info see https://users.dcc.uchile.cl/~isipiran/harris3D.html
+ * */
 
 #include <iostream>
 #include <vector>
@@ -15,26 +19,21 @@ class Vertex
 {
     private:
     uint index;
-    bool mark, isInterest;
+    bool isInterest;
     vector <uint> faces;
     set<uint> neighbours;// 252
 
-    int depth;
     double response;
     uint numNeighbors;
     double v[3];
     public:
 
     Vertex(){v[0] = v[1] = v[2] = 0;}
-    Vertex(double x, double y, double z){v[0] = x; v[1] = y; v[2] = z;mark = false; depth = 0;isInterest = 0;}
+    Vertex(double x, double y, double z){v[0] = x; v[1] = y; v[2] = z;isInterest = 0;}
 
     double x() const { return v[ 0 ]; }
     double y() const { return v[ 1 ]; }
     double z() const { return v[ 2 ]; }
-
-    double& x() { return v[ 0 ]; }
-    double& y() { return v[ 1 ]; }
-    double& z() { return v[ 2 ]; }
 
     double getx(){return v[0];}
     double gety(){return v[1];}
@@ -56,10 +55,6 @@ class Vertex
     void setVertex(double x1, double y1, double z1){v[0] = x1; v[1] = y1; v[2] = z1;}
     void setIndex(uint ind){index = ind;}
     uint getIndex(){return index;}
-    bool isMarked(){return mark;}
-    void setMark(bool mark1){mark = mark1;}
-    int getDepth(){ return depth;}
-    void setDepth(int dep){ depth = dep;}
     double getResponse(){return response;}
     void setResponse(double resp){response = resp;}
     bool getInterest(){return isInterest;}

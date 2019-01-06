@@ -356,3 +356,8 @@ vector<Vertex> HarrisDetector::getInterestPoints()
     }
     return interestPoints;
 }
+
+Mesh HarrisDetector::getMesh()
+{
+    return obj;
+}

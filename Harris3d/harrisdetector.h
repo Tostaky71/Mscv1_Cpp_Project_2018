@@ -18,8 +18,6 @@ class HarrisDetector
 
     int typeSelection;
     double paramSelection;
-
-
     public:
 
     enum TYPENEI{RING, ADAPTIVE};
@@ -31,7 +29,7 @@ class HarrisDetector
     ~HarrisDetector();
 
     vector<Vertex> getInterestPoints();
-
+    Mesh getMesh();
 };
 
 #endif // HARRISDETECTOR_H
